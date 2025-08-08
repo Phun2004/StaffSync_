@@ -1,0 +1,134 @@
+﻿@model Demo.Models.PayslipVM
+@{
+    ViewData["Title"] = "Generate Payslip for " + ViewBag.Employee.Name;
+    // Calculate rates for display
+    var hourlyRate = ViewBag.Employee.BaseSalary / 176m; // 176 = 8 hours * 22 days
+    var overtimeRate = hourlyRate * 1.5m;
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-plus-circle"></i>
+                        Generate Payslip for @ViewBag.Employee.Name
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewData.ModelState.ErrorCount > 0)
+                    {
+                        <div class="alert alert-danger">
+                            <h6><i class="fas fa-exclamation-triangle"></i> Please correct the following errors:</h6>
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <!-- Overtime Rate Information -->
+                    <div class="alert alert-info mb-4">
+                        <h6><i class="fas fa-info-circle"></i> Overtime Calculation (Malaysian Standard)</h6>
+                        <p class="mb-1"><strong>Hourly Rate:</strong> RM @hourlyRate.ToString("N2") (Basic Salary ÷ 176 hours)</p>
+                        <p class="mb-0"><strong>Overtime Rate:</strong> RM @overtimeRate.ToString("N2") per hour (1.5× hourly rate)</p>
+                    </div>
+
+                    <form asp-action="GeneratePayslip" method="post">
+                        <input asp-for="EmployeeId" type="hidden" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" value="@ViewBag.Employee.Id" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Employee Name</label>
+                                    <input type="text" class="form-control" value="@ViewBag.Employee.Name" readonly />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Base Salary</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input type="text" class="form-control" value="@ViewBag.Employee.BaseSalary.ToString("N2")" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Period</label>
+                                    <input type="text" class="form-control" value="@DateTime.Now.ToString("MMMM yyyy")" readonly />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="OvertimeHours" class="form-label">Overtime Hours</label>
+                                    <input asp-for="OvertimeHours" type="number" step="0.5" min="0" max="100" class="form-control" placeholder="0.0" />
+                                    <div class="form-text">Rate: RM @overtimeRate.ToString("N2") per hour (1.5× basic hourly rate)</div>
+                                    <span asp-validation-for="OvertimeHours" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Bonus" class="form-label">Bonus</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input asp-for="Bonus" type="number" step="0.01" min="0" class="form-control" placeholder="0.00" />
+                                    </div>
+                                    <span asp-validation-for="Bonus" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">EPF Deduction (11%)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input type="text" class="form-control text-danger" value="@((ViewBag.Employee.BaseSalary * 0.11m).ToString("N2"))" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">SOCSO Deduction (0.5%)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input type="text" class="form-control text-danger" value="@((ViewBag.Employee.BaseSalary * 0.005m).ToString("N2"))" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Payslip" asp-route-id="@Model.EmployeeId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Generate Payslip
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

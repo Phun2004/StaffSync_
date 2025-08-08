@@ -1,0 +1,119 @@
+﻿@model Demo.Models.EmployeeVM
+@{
+    ViewBag.Title = "StaffSync | Create Employee";
+}
+
+<div class="container-fluid">
+    <h1><i class="fas fa-user-plus me-2"></i>Create New Employee</h1>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Employee Details</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Phone" class="form-label">Phone</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DepartmentId" class="form-label">Department</label>
+                        <select asp-for="DepartmentId" class="form-select">
+                            <option value="">Select Department</option>
+                            @foreach (var dept in ViewBag.Departments)
+                            {
+                                <option value="@dept.Id">@dept.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PositionId" class="form-label">Position</label>
+                        <select asp-for="PositionId" class="form-select">
+                            <option value="">Select Position</option>
+                            @foreach (var pos in ViewBag.Positions)
+                            {
+                                <option value="@pos.Id">@pos.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="PositionId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="YearOfJoining" class="form-label">Year of Joining</label>
+                        <input asp-for="YearOfJoining" class="form-control" type="number" />
+                        <span asp-validation-for="YearOfJoining" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="BaseSalary" class="form-label">Base Salary (RM)</label>
+                        <input asp-for="BaseSalary" class="form-control" type="number" step="0.01" />
+                        <span asp-validation-for="BaseSalary" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required minlength="6" />
+                        <small class="text-muted">Minimum 6 characters</small>
+                        <span class="text-danger" asp-validation-for="password"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="IsPartTime" class="form-label">Employment Type</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input asp-for="IsPartTime" type="checkbox" class="form-check-input" />
+                                <label asp-for="IsPartTime" class="form-check-label">Part-Time</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Picture" class="form-label">Profile Picture</label>
+                        <input type="file" name="Picture" class="form-control" accept="image/*" />
+                        <small class="text-muted">Max 5MB. JPG, PNG, GIF only.</small>
+                        <span asp-validation-for="Picture" class="text-danger"></span>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Create Employee
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+    .form-label {
+        font-weight: 500;
+    }
+</style>

@@ -1,0 +1,420 @@
+﻿@model Demo.Models.EmployeeProfileVM
+@{
+    ViewBag.Title = "StaffSync | My Profile";
+    var userRole = Context.Session.GetString("UserRole");
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1><i class="fas fa-user-circle me-2"></i>My Profile</h1>
+                <div class="badge bg-primary fs-6">Employee Dashboard</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Info"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Profile Card -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
+                </div>
+                <div class="card-body text-center">
+                    <!-- Profile Picture -->
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(Model.Picture))
+                        {
+                            <img src="@Model.Picture" alt="Profile Picture"
+                                 class="rounded-circle border border-3 border-primary shadow-sm"
+                                 style="width: 120px; height: 120px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="bg-gradient border border-3 border-primary rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                                 style="width: 120px; height: 120px; background: linear-gradient(135deg, #007bff, #0056b3);">
+                                <span class="text-white fw-bold" style="font-size: 2.5rem;">
+                                    @Model.Name.Substring(0, 1).ToUpper()
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Upload Picture Form -->
+                    <form asp-action="UploadPicture" method="post" enctype="multipart/form-data" class="mb-3">
+                        <div class="input-group input-group-sm">
+                            <input type="file" class="form-control" name="picture" accept="image/*" required />
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">Max 5MB. JPG, PNG, GIF only.</small>
+                    </form>
+
+                    <!-- Basic Info -->
+                    <h4 class="fw-bold text-primary">@Model.Name</h4>
+                    <p class="text-muted mb-2">ID: <strong>@Model.Id</strong></p>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-phone me-1"></i>@Model.Phone
+                    </p>
+
+                    <!-- Employment Status -->
+                    @if (Model.IsPartTime)
+                    {
+                        <span class="badge bg-warning text-dark fs-6">Part-Time Employee</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success fs-6">Full-Time Employee</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Employment Details -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-briefcase me-2"></i>Employment Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Department</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-building text-info me-2"></i>
+                                @if (Model.Department != null)
+                                {
+                                    <span class="badge bg-info fs-6">@Model.Department.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not Assigned</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Position</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-tie text-info me-2"></i>
+                                @if (Model.Position != null)
+                                {
+                                    <strong>@Model.Position.Name</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not Assigned</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Year Joined</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-alt text-info me-2"></i>
+                                <strong>@Model.YearOfJoining</strong>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Years of Service</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-info me-2"></i>
+                                <strong>@Model.YearsOfService Year(s)</strong>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Base Salary</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-money-bill-wave text-success me-2"></i>
+                                <strong class="text-success">RM @Model.BaseSalary.ToString("N2")</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>My Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 text-center">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-primary mb-1">@Model.ProjectCount</h4>
+                                <small class="text-muted">Active Projects</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-success mb-1">@Model.AttendanceRate%</h4>
+                                <small class="text-muted">Attendance Rate</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-info mb-1">@Model.YearsOfService</h4>
+                                <small class="text-muted">Years Service</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-warning mb-1">@Model.RecentPayslips.Count</h4>
+                                <small class="text-muted">Recent Payslips</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects and Attendance Row -->
+    <div class="row">
+        <!-- My Projects -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>My Projects</h5>
+                    <span class="badge bg-primary">@Model.Projects.Count</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.Projects.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var project in Model.Projects.Take(5))
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <div>
+                                        <h6 class="mb-1">@project.Name</h6>
+                                        <small class="text-muted">@project.Description</small>
+                                    </div>
+                                    <span class="badge bg-@(project.Status == "Active" ? "success" : project.Status == "Completed" ? "primary" : "secondary")">
+                                        @project.Status
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                        @if (Model.Projects.Count > 5)
+                        {
+                            <div class="text-center mt-3">
+                                <small class="text-muted">Showing 5 of @Model.Projects.Count projects</small>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-tasks fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No projects assigned</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Attendance -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Recent Attendance</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentAttendances.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var attendance in Model.RecentAttendances.Take(7))
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <div>
+                                        <h6 class="mb-1">@attendance.Date.ToString("MMM dd, yyyy")</h6>
+                                        <small class="text-muted">@attendance.Date.ToString("dddd")</small>
+                                    </div>
+                                    <span class="badge bg-@(attendance.Status == "Present" ? "success" : attendance.Status == "Absent" ? "danger" : "warning")">
+                                        @attendance.Status
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-calendar-times fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No attendance records</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Payslips -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-money-bill-alt me-2"></i>Recent Payslips</h5>
+                    <span class="badge bg-success">@Model.RecentPayslips.Count</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentPayslips.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Base Salary</th>
+                                        <th>Overtime Pay</th>
+                                        <th>Bonus</th>
+                                        <th>Deductions</th>
+                                        <th>Net Pay</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var payslip in Model.RecentPayslips)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@payslip.Period.ToString("MMM yyyy")</strong>
+                                            </td>
+                                            <td>RM @payslip.BaseSalary.ToString("N2")</td>
+                                            <td>RM @payslip.OvertimePay.ToString("N2")</td>
+                                            <td>RM @payslip.Bonus.ToString("N2")</td>
+                                            <td>RM @((payslip.EPF + payslip.SOCSO).ToString("N2"))</td>
+                                            <td><strong class="text-success">RM @payslip.TotalPay.ToString("N2")</strong></td>
+                                            <td>
+                                                <a asp-controller="Employee" asp-action="PayslipPdf" asp-route-id="@payslip.Id"
+                                                   class="btn btn-outline-primary btn-sm" target="_blank">
+                                                    <i class="fas fa-download"></i> PDF
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Payslips Available</h5>
+                            <p class="text-muted">Your payslips will appear here once they are generated.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-tools me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="changePassword()">
+                                <i class="fas fa-key me-2"></i>Change Password
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-info w-100" onclick="requestLeave()">
+                                <i class="fas fa-calendar-plus me-2"></i>Request Leave
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-success w-100" onclick="contactHR()">
+                                <i class="fas fa-phone me-2"></i>Contact HR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function changePassword() {
+            alert('Password change feature - implement as needed');
+        }
+
+        function requestLeave() {
+            alert('Leave request feature - implement as needed');
+        }
+
+        function contactHR() {
+            alert('Contact HR feature - implement as needed');
+        }
+
+        setTimeout(function() {
+            location.reload();
+        }, 300000);
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: box-shadow 0.15s ease-in-out;
+    }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+    .bg-gradient {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+
+    .list-group-item {
+        transition: background-color 0.15s ease-in-out;
+    }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+    .table th {
+        font-weight: 600;
+        border-top: none;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+    }
+</style>

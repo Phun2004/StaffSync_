@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    @RenderSection("head", false)
+</head>
+<body>
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Info"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @{
+        var userRole = Context.Session.GetString("UserRole");
+        var username = Context.Session.GetString("Username");
+        var isLoggedIn = !string.IsNullOrEmpty(userRole);
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+        var restrictedControllers = new[] { "Employee", "Department", "Project", "Attendance", "Payslip", "Position", "Admin" };
+    }
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">StaffSync</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                @if (isLoggedIn)
+                {
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">Dashboard</a>
+                        </li>
+                        @if (userRole == "Super Admin" || userRole == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "Employee")">Employees</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "Department")">Departments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "Project")">Projects</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Management
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="managementDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Attendance")">Attendance</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Payslip")">Payslips</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Position")">Positions</a></li>
+                                    @if (userRole == "Super Admin")
+                                    {
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "Admin")">Admin Management</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        @if (userRole == "Employee")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Profile", "Employee")">My Profile</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @username (@userRole)
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="@Url.Action("Logout", "Account")">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @if (!isLoggedIn && restrictedControllers.Contains(currentController))
+        {
+            <div class="alert alert-warning text-center">
+                <h4>Access Restricted</h4>
+                <p>You need to login to access the StaffSync Management System.</p>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login Now</a>
+            </div>
+        }
+        else
+        {
+            @if (!string.IsNullOrEmpty(ViewBag.Title))
+            {
+                <h1>@ViewBag.Title</h1>
+            }
+            @RenderBody()
+        }
+    </div>
+
+    <footer class="bg-light text-center py-3 mt-4">
+        <p>StaffSync Management System · Copyright © @DateTime.Today.Year</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

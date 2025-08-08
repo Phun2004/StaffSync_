@@ -1,0 +1,156 @@
+﻿@model Demo.Models.Employee
+
+@{
+    ViewData["Title"] = "Assign Projects to Employee";
+}
+
+<h2>Assign Projects to @Model.Name</h2>
+
+<div class="form-group mb-3">
+    <label class="form-label">Current Projects</label>
+    @if (Model.Projects.Any())
+    {
+        <ul class="list-group">
+            @foreach (var project in Model.Projects)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @project.Name
+                    <a asp-action="RemoveProject" asp-route-id="@Model.Id" asp-route-projectId="@project.Id" class="btn btn-danger btn-sm">Remove</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-muted">No projects currently assigned.</p>
+    }
+</div>
+
+<div class="form-group mb-3">
+    <label for="projectSelect" class="form-label">Available Projects</label>
+    <select class="form-control" id="projectSelect" multiple size="5">
+        @{
+            var availableProjects = ((List<Project>)ViewBag.AllProjects).Where(p => !Model.Projects.Any(ep => ep.Id == p.Id));
+        }
+        @if (availableProjects.Any())
+        {
+            @foreach (var project in availableProjects)
+            {
+                <option value="@project.Id">@project.Name</option>
+            }
+        }
+        else
+        {
+            <option disabled>No projects available to assign</option>
+        }
+    </select>
+    <div class="form-text">Hold Ctrl (Cmd on Mac) to select multiple projects</div>
+</div>
+
+<div class="form-group mb-3">
+    <button type="button" class="btn btn-primary" onclick="addProjects()" id="addProjectsBtn">Add Selected Projects</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+<!-- Hidden form for anti-forgery token -->
+<form id="hiddenForm" style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<input type="hidden" id="employeeId" value="@Model.Id" />
+
+<script>
+    function addProjects() {
+        var select = document.getElementById("projectSelect");
+        var employeeId = document.getElementById("employeeId").value;
+        var addBtn = document.getElementById("addProjectsBtn");
+
+        // Get selected project IDs
+        var projectIds = Array.from(select.selectedOptions).map(option => option.value);
+
+        // Get the anti-forgery token from the hidden form
+        var tokenInput = document.querySelector('#hiddenForm input[name="__RequestVerificationToken"]');
+        var token = tokenInput ? tokenInput.value : null;
+
+        console.log('Employee ID:', employeeId);
+        console.log('Selected Project IDs:', projectIds);
+        console.log('Anti-forgery token found:', token ? 'Yes' : 'No');
+
+        if (projectIds.length === 0) {
+            alert('Please select at least one project.');
+            return;
+        }
+
+        if (!token) {
+            console.error('Anti-forgery token not found.');
+            alert('An error occurred: Anti-forgery token missing. Please refresh the page and try again.');
+            return;
+        }
+
+        // Disable button to prevent double-clicks
+        addBtn.disabled = true;
+        addBtn.textContent = 'Adding...';
+
+        // Create FormData object
+        var formData = new FormData();
+        formData.append('id', employeeId);
+        formData.append('__RequestVerificationToken', token);
+
+        // Append each project ID separately to match string[] projects parameter
+        projectIds.forEach(function(projectId) {
+            formData.append('projects', projectId);
+        });
+
+        // Debug log
+        console.log('Sending request to /Employee/AssignProjects');
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        fetch('/Employee/AssignProjects', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+
+            if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Error response text:', text);
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success response:', data);
+            if (data.success) {
+                alert(data.message || 'Projects assigned successfully!');
+                // Reload the page to show updated project assignments
+                window.location.reload();
+            } else {
+                alert('Failed to assign projects: ' + (data.message || 'Unknown error'));
+                // Re-enable button
+                addBtn.disabled = false;
+                addBtn.textContent = 'Add Selected Projects';
+            }
+        })
+        .catch(error => {
+            console.error('Request failed:', error);
+            alert('An error occurred: ' + error.message);
+            // Re-enable button
+            addBtn.disabled = false;
+            addBtn.textContent = 'Add Selected Projects';
+        });
+    }
+
+    // Optional: Allow double-click on options to add them quickly
+    document.getElementById('projectSelect').addEventListener('dblclick', function() {
+        addProjects();
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

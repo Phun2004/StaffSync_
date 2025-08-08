@@ -1,0 +1,176 @@
+﻿@model List<Demo.Models.Payslip>
+
+@{
+    ViewData["Title"] = ViewBag.Employee != null ? $"Payslips for {ViewBag.Employee.Name}" : "Payslips";
+    var employeeName = ViewBag.Employee?.Name ?? "Unknown Employee";
+
+    // Calculate hourly rate for display
+    var hourlyRate = ViewBag.Employee?.BaseSalary / 176m ?? 0m; // 176 = 8 hours * 22 days
+    var overtimeRate = hourlyRate * 1.5m;
+}
+
+<div class="container mt-4">
+
+    <!-- Display Success/Error Messages -->
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["Info"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Payslip Generation Form -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-plus-circle"></i>
+                        Generate New Payslip
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Payslip" method="post">
+                        <input name="EmployeeId" type="hidden" value="@ViewBag.PayslipVM.EmployeeId" />
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Employee</label>
+                                    <input type="text" class="form-control" value="@employeeName" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Base Salary</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input type="text" class="form-control" value="@ViewBag.PayslipVM.BaseSalary.ToString("N2")" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Overtime Hours</label>
+                                    <input name="OvertimeHours" type="number" step="0.5" min="0" max="100" class="form-control" value="@ViewBag.PayslipVM.OvertimeHours" />
+                                    <small class="form-text text-muted">RM @overtimeRate.ToString("N2")/hour (1.5x rate)</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Bonus</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">RM</span>
+                                        <input name="Bonus" type="number" step="0.01" min="0" class="form-control" value="@ViewBag.PayslipVM.Bonus" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success d-block w-100">
+                                        <i class="fas fa-plus"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payslips List -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-money-check-alt"></i>
+                        Payslip History for @employeeName
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Base Salary</th>
+                                        <th>Overtime Hours</th>
+                                        <th>Overtime Pay</th>
+                                        <th>Bonus</th>
+                                        <th>EPF (11%)</th>
+                                        <th>SOCSO (0.5%)</th>
+                                        <th>Total Pay</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var payslip in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@payslip.Period.ToString("MMM yyyy")</strong>
+                                            </td>
+                                            <td>RM @payslip.BaseSalary.ToString("N2")</td>
+                                            <td>@payslip.OvertimeHours.ToString("F1") hours</td>
+                                            <td>RM @payslip.OvertimePay.ToString("N2")</td>
+                                            <td>RM @payslip.Bonus.ToString("N2")</td>
+                                            <td class="text-danger">-RM @payslip.EPF.ToString("N2")</td>
+                                            <td class="text-danger">-RM @payslip.SOCSO.ToString("N2")</td>
+                                            <td class="fw-bold text-success">RM @payslip.TotalPay.ToString("N2")</td>
+                                            <td>
+                                                <a asp-action="Payslip" asp-route-id="@payslip.EmployeeId" asp-route-payslipId="@payslip.Id" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-download"></i> Download PDF
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                @if (Model.Count > 1)
+                                {
+                                    <tfoot class="table-secondary">
+                                        <tr>
+                                            <th>Total</th>
+                                            <th>RM @Model.Sum(p => p.BaseSalary).ToString("N2")</th>
+                                            <th>@Model.Sum(p => p.OvertimeHours).ToString("F1") hours</th>
+                                            <th>RM @Model.Sum(p => p.OvertimePay).ToString("N2")</th>
+                                            <th>RM @Model.Sum(p => p.Bonus).ToString("N2")</th>
+                                            <th class="text-danger">-RM @Model.Sum(p => p.EPF).ToString("N2")</th>
+                                            <th class="text-danger">-RM @Model.Sum(p => p.SOCSO).ToString("N2")</th>
+                                            <th class="fw-bold text-success">RM @Model.Sum(p => p.TotalPay).ToString("N2")</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                }
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <h4><i class="fas fa-info-circle"></i> No Payslips Found</h4>
+                            <p class="mb-0">No payslips have been generated for this employee yet. Use the form above to generate the first payslip.</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Employee List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,205 @@
+﻿@model List<Demo.Models.AttendanceVM>
+@{
+    ViewData["Title"] = "Attendance for " + ViewBag.Employee.Name;
+}
+
+<div class="container mt-4">
+    <!-- Display Success/Error Messages -->
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["Info"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Attendance Recording Form -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-plus-circle"></i>
+                        Record New Attendance
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Attendance" method="post">
+                        <input name="EmployeeId" type="hidden" value="@ViewBag.Employee.Id" />
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Employee</label>
+                                    <input type="text" class="form-control" value="@ViewBag.Employee.Name" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Date</label>
+                                    <input name="Date" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select name="Status" class="form-control" required>
+                                        <option value="Present">Present</option>
+                                        <option value="Absent">Absent</option>
+                                        <option value="Late">Late</option>
+                                        <option value="Half Day">Half Day</option>
+                                        <option value="Sick Leave">Sick Leave</option>
+                                        <option value="Annual Leave">Annual Leave</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success d-block w-100">
+                                        <i class="fas fa-plus"></i> Record
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance History -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-calendar-check"></i>
+                        Attendance History for @ViewBag.Employee.Name
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Status</th>
+                                        <th>Month</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var attendance in Model)
+                                    {
+                                        <tr>
+                                            <td>@attendance.Date.ToString("dd MMM yyyy")</td>
+                                            <td>@attendance.Date.ToString("dddd")</td>
+                                            <td>
+                                                @switch (attendance.Status)
+                                                {
+                                                    case "Present":
+                                                        <span class="badge bg-success">@attendance.Status</span>
+                                                        break;
+                                                    case "Absent":
+                                                        <span class="badge bg-danger">@attendance.Status</span>
+                                                        break;
+                                                    case "Late":
+                                                        <span class="badge bg-warning">@attendance.Status</span>
+                                                        break;
+                                                    case "Half Day":
+                                                        <span class="badge bg-info">@attendance.Status</span>
+                                                        break;
+                                                    case "Sick Leave":
+                                                        <span class="badge bg-secondary">@attendance.Status</span>
+                                                        break;
+                                                    case "Annual Leave":
+                                                        <span class="badge bg-primary">@attendance.Status</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-light text-dark">@attendance.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>@attendance.Date.ToString("MMMM yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Attendance Summary -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <h5>Monthly Summary</h5>
+                                <div class="row">
+                                    @{
+                                        var currentMonth = Model.Where(a => a.Date.Month == DateTime.Now.Month && a.Date.Year == DateTime.Now.Year);
+                                        var totalDays = currentMonth.Count();
+                                        var presentDays = currentMonth.Count(a => a.Status == "Present");
+                                        var absentDays = currentMonth.Count(a => a.Status == "Absent");
+                                        var lateDays = currentMonth.Count(a => a.Status == "Late");
+                                    }
+                                    <div class="col-md-3">
+                                        <div class="card bg-success text-white text-center">
+                                            <div class="card-body">
+                                                <h4>@presentDays</h4>
+                                                <p>Present Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-danger text-white text-center">
+                                            <div class="card-body">
+                                                <h4>@absentDays</h4>
+                                                <p>Absent Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning text-white text-center">
+                                            <div class="card-body">
+                                                <h4>@lateDays</h4>
+                                                <p>Late Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info text-white text-center">
+                                            <div class="card-body">
+                                                <h4>@totalDays</h4>
+                                                <p>Total Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <h4><i class="fas fa-info-circle"></i> No Attendance Records Found</h4>
+                            <p class="mb-0">No attendance has been recorded for this employee yet. Use the form above to record the first attendance.</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Employee List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

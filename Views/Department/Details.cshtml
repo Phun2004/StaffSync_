@@ -1,0 +1,296 @@
+﻿@model Demo.Models.Department
+@{
+    ViewBag.Title = $"Department Details - {Model.Name}";
+    var employees = ViewBag.Employees as List<Demo.Models.Employee>;
+    var attendanceStats = ViewBag.AttendanceStats as Dictionary<string, object>;
+    var salaryStats = ViewBag.SalaryStats as Dictionary<string, decimal>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to Departments</a>
+</div>
+
+<!-- Department Overview Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Total Employees</h5>
+                        <h3 class="mb-0">@employees.Count</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Average Salary</h5>
+                        <h3 class="mb-0">RM @salaryStats["AverageSalary"].ToString("N0")</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Total Payroll</h5>
+                        <h3 class="mb-0">RM @salaryStats["TotalSalary"].ToString("N0")</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calculator fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title">Attendance Rate</h5>
+                        <h3 class="mb-0">@(attendanceStats["AttendanceRate"])%</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Salary Distribution Chart -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Salary Distribution by Position</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salaryChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Attendance Summary (Last 30 Days)</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-success">@attendanceStats["PresentCount"]</h4>
+                            <small>Present</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-danger">@attendanceStats["AbsentCount"]</h4>
+                            <small>Absent</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mt-3">
+                    <div class="progress-bar bg-success" role="progressbar"
+                         style="width: @(attendanceStats["AttendanceRate"])%"
+                         aria-valuenow="@(attendanceStats["AttendanceRate"])"
+                         aria-valuemin="0" aria-valuemax="100">
+                        @(attendanceStats["AttendanceRate"])%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Employees Table -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Department Employees</h5>
+        <span class="badge bg-primary">@employees.Count employee(s)</span>
+    </div>
+    <div class="card-body">
+        @if (employees.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Year Joined</th>
+                            <th>Employment Type</th>
+                            <th>Base Salary</th>
+                            <th>Attendance Rate</th>
+                            <th>Projects</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var employee in employees)
+                        {
+                            var attendanceRate = ViewBag.EmployeeAttendanceRates as Dictionary<string, decimal>;
+                            var employeeProjects = ViewBag.EmployeeProjects as Dictionary<string, List<Demo.Models.Project>>;
+                            <tr>
+                                <td>
+                                    <strong>@employee.Id</strong>
+                                    @if (!string.IsNullOrEmpty(employee.Picture))
+                                    {
+                                        <img src="@employee.Picture" alt="@employee.Name" class="rounded-circle ms-2" width="30" height="30">
+                                    }
+                                </td>
+                                <td>@employee.Name</td>
+                                <td>
+                                    <span class="badge bg-info">@employee.Position?.Name</span>
+                                </td>
+                                <td>@employee.YearOfJoining</td>
+                                <td>
+                                    @if (employee.IsPartTime)
+                                    {
+                                        <span class="badge bg-warning text-dark">Part-Time</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Full-Time</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <strong>RM @employee.BaseSalary.ToString("N2")</strong>
+                                </td>
+                                <td>
+                                    @{
+                                        var rate = attendanceRate?.ContainsKey(employee.Id) == true ? attendanceRate[employee.Id] : 0;
+                                        var rateClass = rate >= 90 ? "success" : rate >= 75 ? "warning" : "danger";
+                                    }
+                                    <span class="badge bg-@rateClass">@rate.ToString("F1")%</span>
+                                </td>
+                                <td>
+                                    @{
+                                        var projects = employeeProjects?.ContainsKey(employee.Id) == true ? employeeProjects[employee.Id] : new List<Demo.Models.Project>();
+                                    }
+                                    @if (projects.Any())
+                                    {
+                                        <span class="badge bg-secondary">@projects.Count project(s)</span>
+                                        <div class="small text-muted mt-1">
+                                            @string.Join(", ", projects.Take(2).Select(p => p.Name))@(projects.Count > 2 ? "..." : "")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">No projects</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-controller="Employee" asp-action="Edit" asp-route-id="@employee.Id"
+                                           class="btn btn-outline-primary" title="Edit Employee">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-controller="Employee" asp-action="Attendance" asp-route-id="@employee.Id"
+                                           class="btn btn-outline-info" title="View Attendance">
+                                            <i class="fas fa-calendar"></i>
+                                        </a>
+                                        <a asp-controller="Employee" asp-action="Payslip" asp-route-id="@employee.Id"
+                                           class="btn btn-outline-success" title="View Payslips">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No employees assigned to this department</h5>
+                <p class="text-muted">Employees will appear here once they are assigned to the @Model.Name department.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+    <script>
+        // Salary Distribution Chart
+        const ctx = document.getElementById('salaryChart').getContext('2d');
+        const salaryData = @Html.Raw(Json.Serialize(ViewBag.ChartData));
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: salaryData.labels,
+                datasets: [{
+                    label: 'Average Salary (RM)',
+                    data: salaryData.values,
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(255, 205, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 205, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'RM ' + value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Average: RM ' + context.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

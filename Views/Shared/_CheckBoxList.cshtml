@@ -1,0 +1,15 @@
+﻿@model (string Name, IEnumerable<SelectListItem> List, bool IsBreak)
+
+<div class="checkbox-list">
+    @foreach (var item in Model.List)
+    {
+        <div class="form-check @(Model.IsBreak ? "form-check-inline" : "")">
+            <input type="checkbox"
+                   name="@Model.Name"
+                   value="@item.Value"
+                   class="form-check-input"
+                   @(item.Selected ? "checked" : "") />
+            <label class="form-check-label">@item.Text</label>
+        </div>
+    }
+</div>

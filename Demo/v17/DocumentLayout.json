@@ -1,0 +1,297 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\viewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\viewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\migrations\\20250731032251_createdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\migrations\\20250731032251_createdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\controllers\\projectcontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\controllers\\projectcontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\controllers\\employeecontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\controllers\\employeecontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\controllers\\departmentcontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\controllers\\departmentcontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\views\\department\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\views\\department\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\position.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\position.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\payslip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\payslip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|c:\\users\\phun\\desktop\\staffsync\\staffsync\\demo\\demo\\models\\department.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{50C1F077-6D9E-4EA9-90CB-7F0ADF4E1D2F}|Demo\\Demo.csproj|solutionrelative:demo\\models\\department.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20250731032251_CreateDB.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Migrations\\20250731032251_CreateDB.cs",
+              "RelativeDocumentMoniker": "Demo\\Migrations\\20250731032251_CreateDB.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Migrations\\20250731032251_CreateDB.cs",
+              "RelativeToolTip": "Demo\\Migrations\\20250731032251_CreateDB.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:22:51.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Demo\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\appsettings.Development.json",
+              "RelativeToolTip": "Demo\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-31T03:19:44.497Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Program.cs",
+              "RelativeDocumentMoniker": "Demo\\Program.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Program.cs",
+              "RelativeToolTip": "Demo\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:09:47.402Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\appsettings.json",
+              "RelativeDocumentMoniker": "Demo\\appsettings.json",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\appsettings.json",
+              "RelativeToolTip": "Demo\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-31T03:04:13.016Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProjectControllers.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\ProjectControllers.cs",
+              "RelativeDocumentMoniker": "Demo\\Controllers\\ProjectControllers.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\ProjectControllers.cs",
+              "RelativeToolTip": "Demo\\Controllers\\ProjectControllers.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA9wDUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:03:04.449Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DB.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\DB.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\DB.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\DB.cs",
+              "RelativeToolTip": "Demo\\Models\\DB.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAmwE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:30.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Attendance.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Attendance.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Attendance.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Attendance.cs",
+              "RelativeToolTip": "Demo\\Models\\Attendance.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:23.281Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Demo\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Demo\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:03:00.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EmployeeControllers.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\EmployeeControllers.cs",
+              "RelativeDocumentMoniker": "Demo\\Controllers\\EmployeeControllers.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\EmployeeControllers.cs",
+              "RelativeToolTip": "Demo\\Controllers\\EmployeeControllers.cs",
+              "ViewState": "AgIAAKMAAAAAAAAAAAAcwM0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:02:54.517Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DepartmentControllers.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\DepartmentControllers.cs",
+              "RelativeDocumentMoniker": "Demo\\Controllers\\DepartmentControllers.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Controllers\\DepartmentControllers.cs",
+              "RelativeToolTip": "Demo\\Controllers\\DepartmentControllers.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAwwDwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:02:47.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Views\\Department\\Index.cshtml",
+              "RelativeDocumentMoniker": "Demo\\Views\\Department\\Index.cshtml",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Views\\Department\\Index.cshtml",
+              "RelativeToolTip": "Demo\\Views\\Department\\Index.cshtml",
+              "ViewState": "AgIAABoAAAAAAAAAAAAiwEUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-31T03:02:11.548Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ViewModels.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\ViewModels.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\ViewModels.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\ViewModels.cs",
+              "RelativeToolTip": "Demo\\Models\\ViewModels.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:58.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Project.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Project.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Project.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Project.cs",
+              "RelativeToolTip": "Demo\\Models\\Project.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:54.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Position.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Position.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Position.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Position.cs",
+              "RelativeToolTip": "Demo\\Models\\Position.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:50.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Payslip.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Payslip.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Payslip.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Payslip.cs",
+              "RelativeToolTip": "Demo\\Models\\Payslip.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:46.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Employee.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Employee.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Employee.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Employee.cs",
+              "RelativeToolTip": "Demo\\Models\\Employee.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAkwCQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:40.873Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Department.cs",
+              "DocumentMoniker": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Department.cs",
+              "RelativeDocumentMoniker": "Demo\\Models\\Department.cs",
+              "ToolTip": "C:\\Users\\PHUN\\Desktop\\StaffSync\\StaffSync\\Demo\\Demo\\Models\\Department.cs",
+              "RelativeToolTip": "Demo\\Models\\Department.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T03:01:35.968Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

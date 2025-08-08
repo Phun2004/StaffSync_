@@ -1,0 +1,466 @@
+﻿@model Demo.Models.Employee
+@{
+    ViewBag.Title = "StaffSync | Employee Management";
+    var employees = ViewBag.Employees as IEnumerable<Demo.Models.Employee>;
+    var userRole = Context.Session.GetString("UserRole");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-users me-2"></i>Employee Management</h1>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary" onclick="toggleView()">
+            <i class="fas fa-th-large" id="viewIcon"></i>
+            <span id="viewText">Grid View</span>
+        </button>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Employee
+        </a>
+    </div>
+</div>
+
+@if (TempData["Info"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Info"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Search and Filter Bar -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="searchInput" placeholder="Search by name, ID, phone, or department..." onkeyup="filterEmployees()">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <select class="form-select" id="departmentFilter" onchange="filterEmployees()">
+            <option value="">All Departments</option>
+            @if (employees != null)
+            {
+                var departments = employees.Where(e => e.Department != null).Select(e => e.Department.Name).Distinct().OrderBy(d => d);
+                foreach (var dept in departments)
+                {
+                    <option value="@dept">@dept</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+@if (employees != null && employees.Any())
+{
+    <!-- Summary Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@employees.Count()</h3>
+                        <p class="mb-0">Total Employees</p>
+                    </div>
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@employees.Count(e => !e.IsPartTime)</h3>
+                        <p class="mb-0">Full Time</p>
+                    </div>
+                    <i class="fas fa-user-tie fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@employees.Count(e => e.IsPartTime)</h3>
+                        <p class="mb-0">Part Time</p>
+                    </div>
+                    <i class="fas fa-user-clock fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">RM @employees.Sum(e => e.BaseSalary).ToString("N0")</h3>
+                        <p class="mb-0">Total Payroll</p>
+                    </div>
+                    <i class="fas fa-money-bill-wave fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table View (Default) -->
+    <div id="tableView">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Employee List</h5>
+                <span class="badge bg-primary fs-6" id="employeeCount">@employees.Count() Employee(s)</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="employeeTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Contact</th>
+                                <th>Employment</th>
+                                <th>Salary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in employees)
+                            {
+                                <tr class="employee-row"
+                                    data-name="@employee.Name.ToLower()"
+                                    data-id="@employee.Id.ToLower()"
+                                    data-phone="@employee.Phone"
+                                    data-department="@(employee.Department?.Name ?? "")">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrEmpty(employee.Picture))
+                                            {
+                                                <img src="@employee.Picture" alt="Profile"
+                                                     class="rounded-circle me-3 border border-2 border-light shadow-sm"
+                                                     style="width: 45px; height: 45px; object-fit: cover;" />
+                                            }
+                                            else
+                                            {
+                                                <div class="bg-gradient-primary rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
+                                                     style="width: 45px; height: 45px;">
+                                                    <span class="text-white fw-bold">@employee.Name.Substring(0, 1).ToUpper()</span>
+                                                </div>
+                                            }
+                                            <div>
+                                                <div class="fw-bold">@employee.Name</div>
+                                                <small class="text-muted">ID: @employee.Id</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (employee.Department != null)
+                                        {
+                                            <span class="badge bg-info">@employee.Department.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Unassigned</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (employee.Position != null)
+                                        {
+                                            <span class="badge bg-secondary">@employee.Position.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Not set</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <i class="fas fa-phone me-1"></i>@employee.Phone
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="small">
+                                            <div>Joined: @employee.YearOfJoining</div>
+                                            @if (employee.IsPartTime)
+                                            {
+                                                <span class="badge bg-warning text-dark">Part Time</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Full Time</span>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">RM @employee.BaseSalary.ToString("N2")</strong>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@employee.Id">
+                                                        <i class="fas fa-edit text-warning me-2"></i>Edit Details
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-action="AssignProjects" asp-route-id="@employee.Id">
+                                                        <i class="fas fa-tasks text-primary me-2"></i>Assign Projects
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-action="Attendance" asp-route-id="@employee.Id">
+                                                        <i class="fas fa-calendar-check text-info me-2"></i>View Attendance
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" asp-action="Payslip" asp-route-id="@employee.Id">
+                                                        <i class="fas fa-money-bill text-success me-2"></i>Manage Payslips
+                                                    </a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
+                                                    <a class="dropdown-item text-danger" href="#"
+                                                       onclick="confirmDelete('@employee.Id', '@employee.Name')">
+                                                        <i class="fas fa-trash me-2"></i>Delete Employee
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid View -->
+    <div id="gridView" style="display: none;">
+        <div class="row">
+            @foreach (var employee in employees)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 employee-card"
+                     data-name="@employee.Name.ToLower()"
+                     data-id="@employee.Id.ToLower()"
+                     data-phone="@employee.Phone"
+                     data-department="@(employee.Department?.Name ?? "")">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            @if (!string.IsNullOrEmpty(employee.Picture))
+                            {
+                                <img src="@employee.Picture" alt="Profile"
+                                     class="rounded-circle border border-2 border-primary shadow-sm mb-3"
+                                     style="width: 80px; height: 80px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="bg-gradient-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm"
+                                     style="width: 80px; height: 80px;">
+                                    <span class="text-white fw-bold" style="font-size: 2rem;">@employee.Name.Substring(0, 1).ToUpper()</span>
+                                </div>
+                            }
+                            <h5 class="fw-bold">@employee.Name</h5>
+                            <p class="text-muted mb-2">ID: @employee.Id</p>
+                            <p class="text-muted mb-2">
+                                @if (employee.Department != null)
+                                {
+                                    <span class="badge bg-info">@employee.Department.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Unassigned</span>
+                                }
+                            </p>
+                            <p class="text-muted mb-2">
+                                @if (employee.Position != null)
+                                {
+                                    <span class="badge bg-secondary">@employee.Position.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not set</span>
+                                }
+                            </p>
+                            <p class="text-muted mb-3">
+                                <i class="fas fa-phone me-1"></i>@employee.Phone
+                            </p>
+                            <div class="mb-3">
+                                @if (employee.IsPartTime)
+                                {
+                                    <span class="badge bg-warning text-dark">Part Time</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Full Time</span>
+                                }
+                            </div>
+                            <p class="text-success fw-bold mb-3">RM @employee.BaseSalary.ToString("N2")</p>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-action="Edit" asp-route-id="@employee.Id">
+                                            <i class="fas fa-edit text-warning me-2"></i>Edit Details
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-action="AssignProjects" asp-route-id="@employee.Id">
+                                            <i class="fas fa-tasks text-primary me-2"></i>Assign Projects
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-action="Attendance" asp-route-id="@employee.Id">
+                                            <i class="fas fa-calendar-check text-info me-2"></i>View Attendance
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-action="Payslip" asp-route-id="@employee.Id">
+                                            <i class="fas fa-money-bill text-success me-2"></i>Manage Payslips
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="#"
+                                           onclick="confirmDelete('@employee.Id', '@employee.Name')">
+                                            <i class="fas fa-trash me-2"></i>Delete Employee
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No Employees Found</h5>
+            <p class="text-muted mb-4">Add new employees to manage your workforce.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add New Employee
+            </a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        let isGridView = false;
+
+        function toggleView() {
+            isGridView = !isGridView;
+            const tableView = document.getElementById('tableView');
+            const gridView = document.getElementById('gridView');
+            const viewIcon = document.getElementById('viewIcon');
+            const viewText = document.getElementById('viewText');
+
+            if (isGridView) {
+                tableView.style.display = 'none';
+                gridView.style.display = 'block';
+                viewIcon.className = 'fas fa-table';
+                viewText.textContent = 'Table View';
+            } else {
+                tableView.style.display = 'block';
+                gridView.style.display = 'none';
+                viewIcon.className = 'fas fa-th-large';
+                viewText.textContent = 'Grid View';
+            }
+        }
+
+        function filterEmployees() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const employeeRows = document.getElementsByClassName('employee-row');
+            const employeeCards = document.getElementsByClassName('employee-card');
+            let visibleCount = 0;
+
+            Array.from(employeeRows).forEach(row => {
+                const name = row.dataset.name || '';
+                const id = row.dataset.id || '';
+                const phone = row.dataset.phone || '';
+                const department = row.dataset.department || '';
+
+                const matchesSearch = name.includes(searchInput) || id.includes(searchInput) || phone.includes(searchInput);
+                const matchesDepartment = departmentFilter === '' || department === departmentFilter;
+
+                if (matchesSearch && matchesDepartment) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            Array.from(employeeCards).forEach(card => {
+                const name = card.dataset.name || '';
+                const id = card.dataset.id || '';
+                const phone = card.dataset.phone || '';
+                const department = card.dataset.department || '';
+
+                const matchesSearch = name.includes(searchInput) || id.includes(searchInput) || phone.includes(searchInput);
+                const matchesDepartment = departmentFilter === '' || department === departmentFilter;
+
+                if (matchesSearch && matchesDepartment) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('employeeCount').textContent = `${visibleCount} Employee(s)`;
+        }
+
+        function confirmDelete(id, name) {
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                window.location.href = `/Employee/Delete/${id}`;
+            }
+        }
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: box-shadow 0.15s ease-in-out;
+    }
+
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+
+    .table th {
+        font-weight: 600;
+        border-top: none;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+    }
+
+    .employee-card .card-body {
+        padding: 1.5rem;
+    }
+</style>
